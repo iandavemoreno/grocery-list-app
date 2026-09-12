@@ -1,0 +1,4 @@
+node_modules/
+grocery.db
+playwright-report/
+test-results/
