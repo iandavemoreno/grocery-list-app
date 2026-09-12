@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+h1 {
+    text-align: center;
+}
+
+#add-item-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+#item-name {
+    flex: 2;
+    padding: 8px;
+}
+
+#item-category {
+    flex: 1;
+    padding: 8px;
+}
+
+#item-quantity {
+    width: 60px;
+    padding: 8px;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #4a7c59;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3a6347;
+}
+
+#clear-checked-btn {
+    background-color: #a94442;
+    margin-bottom: 16px;
+}
+
+#clear-checked-btn:hover {
+    background-color: #843534;
+}
+
+.category-group {
+    margin-bottom: 16px;
+}
+
+.category-title {
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: white;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.item.checked {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+.item button {
+    margin-left: auto;
+    padding: 4px 8px;
+    font-size: 12px;
+}

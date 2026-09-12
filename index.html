@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grocery List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Grocery List</h1>
+
+    <form id="add-item-form">
+        <input type="text" id="item-name" placeholder="Item name" aria-label="Item name" required>
+
+        <select id="item-category" aria-label="Category" required>
+            <option value="">Select category</option>
+            <option value="Produce">Produce</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Meat">Meat</option>
+            <option value="Bakery">Bakery</option>
+            <option value="Canned Goods">Canned Goods</option>
+            <option value="Frozen">Frozen</option>
+            <option value="Household">Household</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <input type="number" id="item-quantity" placeholder="Qty" aria-label="Quantity" min="1" value="1">
+
+        <button type="submit">Add Item</button>
+    </form>
+
+    <button id="clear-checked-btn" type="button">Clear Checked Items</button>
+
+    <div id="item-list"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
