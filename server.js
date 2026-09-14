@@ -40,6 +40,37 @@ app.post('/api/items', (req, res) => {
     });
 });
 
+app.put('/api/items/:id', (req, res) => {
+    const id = req.params.id;
+    const { name, category, quantity } = req.body;
+
+    const item = db.prepare('SELECT * FROM items WHERE id = ?').get(id);
+    if (!item) {
+        return res.status(404).json({ error: 'Item not found.' });
+    }
+
+    if (!name || !name.trim()) {
+        return res.status(400).json({ error: 'Item name is required.' });
+    }
+
+    if (!category) {
+        return res.status(400).json({ error: 'Category is required.' });
+    }
+
+    const finalQuantity = quantity && quantity > 0 ? quantity : 1;
+
+    db.prepare('UPDATE items SET name = ?, category = ?, quantity = ? WHERE id = ?')
+        .run(name.trim(), category, finalQuantity, id);
+
+    res.json({
+        id: item.id,
+        name: name.trim(),
+        category: category,
+        quantity: finalQuantity,
+        checked: item.checked
+    });
+});
+
 // Toggle an item's checked/unchecked state
 app.patch('/api/items/:id/toggle', (req, res) => {
     const id = req.params.id;

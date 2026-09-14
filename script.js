@@ -1,9 +1,13 @@
+let allItems = [];
+let editingItemId = null;
+
 function loadItems() {
     fetch('/api/items')
         .then(function (response) {
             return response.json();
         })
         .then(function (items) {
+            allItems = items;
             renderItems(items);
         });
 }
@@ -39,6 +43,7 @@ function renderItems(items) {
                 ' onchange="toggleItem(' + item.id + ')" aria-label="Mark ' + item.name + ' as picked up">';
             html += '<span>' + item.name + ' (x' + item.quantity + ')</span>';
             html += '<button onclick="deleteItem(' + item.id + ')">Delete</button>';
+            html += '<button onclick="editItem(' + item.id + ')">Edit</button>';
             html += '</div>';
         });
 
@@ -66,6 +71,32 @@ function deleteItem(id) {
     });
 }
 
+function editItem(id) {
+    const item = allItems.find(function (i) {
+        return i.id === id;
+    });
+
+    if (!item) {
+        return;
+    }
+
+    document.getElementById('item-name').value = item.name;
+    document.getElementById('item-category').value = item.category;
+    document.getElementById('item-quantity').value = item.quantity;
+
+    editingItemId = id;
+    document.getElementById('form-submit-btn').textContent = 'Save Changes';
+    document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+}
+
+function cancelEdit() {
+    editingItemId = null;
+    document.getElementById('add-item-form').reset();
+    document.getElementById('item-quantity').value = '1';
+    document.getElementById('form-submit-btn').textContent = 'Add Item';
+    document.getElementById('cancel-edit-btn').style.display = 'none';
+}
+
 document.getElementById('add-item-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -87,8 +118,12 @@ document.getElementById('add-item-form').addEventListener('submit', function (ev
         return;
     }
 
-    fetch('/api/items', {
-        method: 'POST',
+    const isEditing = editingItemId !== null;
+    const url = isEditing ? '/api/items/' + editingItemId : '/api/items';
+    const method = isEditing ? 'PUT' : 'POST';
+
+    fetch(url, {
+        method: method,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -102,9 +137,7 @@ document.getElementById('add-item-form').addEventListener('submit', function (ev
         return response.json();
     })
     .then(function () {
-        nameInput.value = '';
-        categoryInput.value = '';
-        quantityInput.value = '1';
+        cancelEdit();
         loadItems();
     });
 });
@@ -118,4 +151,5 @@ document.getElementById('clear-checked-btn').addEventListener('click', function 
     });
 });
 
+document.getElementById('cancel-edit-btn').addEventListener('click', cancelEdit);
 loadItems();

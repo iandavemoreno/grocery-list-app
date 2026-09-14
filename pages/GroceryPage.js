@@ -59,6 +59,22 @@ class GroceryPage {
         await deleteResponsePromise;
     }
 
+    async editItem(currentName, newName, newCategory, newQuantity) {
+    await this.getItem(currentName).locator('button:has-text("Edit")').click();
+
+    await this.nameInput.fill(newName);
+    await this.categorySelect.selectOption(newCategory);
+    await this.quantityInput.fill(String(newQuantity));
+
+    const editResponsePromise = this.page.waitForResponse(resp =>
+        resp.url().includes('/api/items/') &&
+        resp.request().method() === 'PUT'
+    );
+
+    await this.addButton.click();
+    await editResponsePromise;
+}
+
     async clearChecked() {
         const clearResponsePromise = this.page.waitForResponse(resp =>
             resp.url().includes('/clear-checked') &&

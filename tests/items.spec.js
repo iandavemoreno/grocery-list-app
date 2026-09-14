@@ -60,3 +60,26 @@ test('clearing checked items removes only checked items', async ({ page }) => {
     await groceryPage.deleteItem(uncheckedItemName);
     await expect(groceryPage.itemList).not.toContainText(uncheckedItemName);
 });
+
+test('editing an item updates its name, category, and quantity', async ({ page }) => {
+    const groceryPage = new GroceryPage(page);
+    await groceryPage.goto();
+
+    const originalName = createTestItemName('Yogurt');
+    const updatedName = createTestItemName('Cheese');
+
+    await groceryPage.addItem(originalName, 'Dairy', 1);
+
+    await groceryPage.editItem(originalName, updatedName, 'Frozen', 3);
+
+    const frozenGroup = groceryPage.getCategoryGroup('Frozen');
+    await expect(frozenGroup).toContainText(updatedName);
+    await expect(frozenGroup).toContainText('x3');
+    await expect(groceryPage.itemList).not.toContainText(originalName);
+
+    // ------------------------------------------------
+    // CLEAN UP TEST ITEM
+    // ------------------------------------------------
+    await groceryPage.deleteItem(updatedName);
+    await expect(groceryPage.itemList).not.toContainText(updatedName);
+});
